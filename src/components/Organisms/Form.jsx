@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import '../styles/form.css';
+import { useDispatch } from 'react-redux';
+import { addContact } from '../Atoms/Store';
 import { nanoid } from 'nanoid';
 
-const Form = ({ onSubmit }) => {
+import './form.css';
+
+const Form = () => {
   const [formData, setFormData] = useState({ name: '', number: '' });
   const nameId = nanoid();
   const numberId = nanoid();
+  const dispatch = useDispatch();
 
   const handleSubmit = evt => {
     evt.preventDefault();
@@ -16,7 +19,7 @@ const Form = ({ onSubmit }) => {
       return;
     }
 
-    onSubmit({ name, number });
+    dispatch(addContact({ id: nanoid(), name, number }));
 
     reset();
   };
@@ -48,8 +51,8 @@ const Form = ({ onSubmit }) => {
           title="Name may contain only letters, apostrophe, dash and spaces."
           required
           placeholder="Name"
-          id={nameId} // Added id attribute to correspond to the 'for' attribute in the label
-          autoComplete="off" // Added autocomplete attribute to prevent autofilling
+          id={nameId}
+          autoComplete="off"
         />
       </label>
       <label className="label" htmlFor={numberId}>
@@ -63,17 +66,13 @@ const Form = ({ onSubmit }) => {
           title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
           required
           placeholder="Number"
-          id={numberId} // Added id attribute to correspond to the 'for' attribute in the label
-          autoComplete="off" // Added autocomplete attribute to prevent autofilling
+          id={numberId}
+          autoComplete="off"
         />
       </label>
       <button type="submit">Add contact</button>
     </form>
   );
-};
-
-Form.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
 };
 
 export default Form;
